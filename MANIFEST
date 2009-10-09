@@ -1,6 +1,6 @@
+Build.PL
 Changes
 MANIFEST
-Makefile.PL
 README
 lib/Tool/Bench.pm
 t/00-load.t
