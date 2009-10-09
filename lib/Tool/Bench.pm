@@ -4,17 +4,6 @@ use Scalar::Util qw{looks_like_number};
 use List::Util qw{min max};
 use Benchmark::Stopwatch::Pause;
 
-has results => (
-   metaclass => 'Collection::Array',
-   is        => 'ro',
-   isa       => 'ArrayRef',
-   lazy      => 1,
-   default   => sub { [] },
-   provides  => {
-      push   => 'add_result',
-   }
-);
-
 =head1 NAME
 
 Tool::Bench - Stuff to make Benchmarking easy.
@@ -39,25 +28,80 @@ Perhaps a little code snippet.
     my $foo = Tool::Bench->new();
     ...
 
-=head1 EXPORT
+=cut
 
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
+has results => (
+   metaclass => 'Collection::Array',
+   is        => 'ro',
+   isa       => 'ArrayRef',
+   lazy      => 1,
+   default   => sub { [] },
+   provides  => {
+      push   => 'add_result',
+   }
+   clearer   => 'clear_results',
+   predicate => 'has_results',
+);
 
-=head1 FUNCTIONS
+=head1 METHODS
 
-=head2 function1
+=head2 results
+
+Get an arrayref of all the results currently stored.
+
+=head2 add_results
+
+Add a result to the stack.
+
+=head2 has_results
+
+Have we stored any results yet?
+
+=head2 clear_results
+
+Remove all exisitng results.
 
 =cut
 
-sub function1 {
+has run_count => (
+   is => 'rw',
+   isa => 'Int',
+   default => 100,
+);
+
+=head2 run_command
+
+Takes a string to run as a comand to run, an integer for how many times to run said command.
+
+Results are stored in results.
+
+=cut
+
+sub run_command {
+   my ($self,$cmd,$count) = @_;
+   my $sw = Benchmark::Stopwatch::Pause->new->start->pause;
+   for (1..($count||$self->run_count)) {
+      $sw->unpause($_);
+      my $rv = qx($cmd); #better trap output for use if needed
+      $sw->pause;
+      # if you want to check the results.... do it here.
+   }
+   $sw->stop;
+
+   my $data = $sw->as_unpaused_data;
+   shift @{$data->{laps}}; # no point in keeping _start_
+   my @times = map{$_->{elapsed_time}} @{$data->{laps}};
+   $self->add_result(
+          { max   => max(@times),
+            min   => min(@times),
+            times => \@times,
+            total => $data->{total_elapsed_time},
+            avg   => (scalar(@times)) ? $data->{total_elapsed_time}/scalar(@times)
+                                      : 0,
+          }
+   );
 }
 
-=head2 function2
-
-=cut
-
-sub function2 {
 }
 
 =head1 AUTHOR
