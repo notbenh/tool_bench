@@ -1,5 +1,6 @@
 package Tool::Bench;
 use Moose;
+use MooseX::AttributeHelpers;
 use Scalar::Util qw{looks_like_number};                                                                                                                               
 use List::Util qw{min max};
 use Benchmark::Stopwatch::Pause;
@@ -38,7 +39,7 @@ has results => (
    default   => sub { [] },
    provides  => {
       push   => 'add_result',
-   }
+   },
    clearer   => 'clear_results',
    predicate => 'has_results',
 );
@@ -98,11 +99,11 @@ sub run_command {
             total => $data->{total_elapsed_time},
             avg   => (scalar(@times)) ? $data->{total_elapsed_time}/scalar(@times)
                                       : 0,
+            cmd   => $cmd,
           }
    );
 }
 
-}
 
 =head1 AUTHOR
 
