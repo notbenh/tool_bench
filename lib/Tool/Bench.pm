@@ -20,15 +20,6 @@ our $VERSION = '0.01';
 
 =head1 SYNOPSIS
 
-Quick summary of what the module does.
-
-Perhaps a little code snippet.
-
-    use Tool::Bench;
-
-    my $foo = Tool::Bench->new();
-    ...
-
 =cut
 
 has results => (

@@ -9,6 +9,7 @@ my $builder = Module::Build->new(
     dist_version_from   => 'lib/Tool/Bench.pm',
     build_requires => {
         'Test::More' => 0,
+        'Test::Most' => 0,
     },
     add_to_cleanup      => [ 'Tool-Bench-*' ],
     create_makefile_pl => 'traditional',
