@@ -1,0 +1,31 @@
+---
+name: Tool-Bench
+version: 0.02
+author:
+  - 'ben hengst <notbenh@cpan.org>'
+abstract: Stuff to make Benchmarking easy.
+license: perl
+resources:
+  license: http://dev.perl.org/licenses/
+build_requires:
+  Benchmark::Stopwatch::Pause: 0
+  List::Util: 0
+  Moose: 0
+  MooseX::AttributeHelpers: 0
+  POSIX: 0
+  Test::More: 0
+  Test::Most: 0
+configure_requires:
+  Module::Build: 0.35
+provides:
+  Tool::Bench:
+    file: lib/Tool/Bench.pm
+    version: 0.02
+  Tool::Bench::Command:
+    file: lib/Tool/Bench/Command.pm
+  Tool::Bench::Result:
+    file: lib/Tool/Bench/Result.pm
+generated_by: Module::Build version 0.35
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
