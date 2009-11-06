@@ -10,6 +10,11 @@ my $builder = Module::Build->new(
     build_requires => {
         'Test::More' => 0,
         'Test::Most' => 0,
+        'POSIX'      => 0,
+        'List::Util' => 0,
+        'Moose'      => 0,
+        'MooseX::AttributeHelpers' => 0,
+        'Benchmark::Stopwatch::Pause' => 0,
     },
     add_to_cleanup      => [ 'Tool-Bench-*' ],
     create_makefile_pl => 'traditional',
