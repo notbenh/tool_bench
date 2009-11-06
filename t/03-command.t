@@ -66,3 +66,18 @@ is( $c->result->count, 10, q{run count = result count} );
 ok(!$c->time_run, q{run alone fails cleanup already run} );
 is( $c->result->count, 10, q{run count = result count} );
 
+
+#---------------------------------------------------------------------------
+#  Check timeing
+#---------------------------------------------------------------------------
+ok( $c = Tool::Bench::Command->new(
+            command => q{perl -e 'sleep 1'},
+         ), q{setup}
+);
+is( $c->run(3), 3, q{sleep test});
+eq_or_diff(
+   [map{int}$c->result->times],
+   [1,1,1],
+   q{rough numbers look right},
+);
+
