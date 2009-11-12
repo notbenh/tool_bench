@@ -56,8 +56,37 @@ sub add_command {
    return scalar( keys %{$self->_commands} );
 }
 
+has run_count => (
+   is => 'rw',
+   isa => 'Int',
+   default => 100,
+);
 
+sub run {shift->run_all_commands_interleaved(@_)}
+sub run_all_commands_interleaved {
+   my $self = shift;
 
+   my $cmd_loop = sub{my( $action,@arg ) = @_; 
+                      map{#$self->_commands->{$_}->$action(@arg)
+                          my $c = $self->_commands->{$_};
+                          if ($c->can($action)) {
+                             $c->$action;
+                             warn sprintf q{RUN: %s runing %s action.}, ref($c), $action ;
+                          }
+                          else {
+                             warn sprintf q{!!!FAIL: %s does not have a %s action.}, ref($c), $action ;
+                          }
+                         } keys %{$self->_commands}
+                     };
+
+   #setup
+   $cmd_loop->('run_setup');
+   for my $i (1..$self->run_count) {
+      $cmd_loop->('time_run'); 
+   } 
+   $cmd_loop->('run_cleanup');
+   return 'kitten';
+}
 
 __PACKAGE__->meta->make_immutable();
 no Moose;

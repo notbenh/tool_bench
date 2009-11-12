@@ -140,9 +140,10 @@ sub run_cleanup {
 sub time_run {
    my $self = shift;
    my $cmd  = shift || $self->cmd;
+   my $note = shift;
    die '!!! NO COMMAND SPECIFIED' unless defined $cmd;
 
-   $self->sw->unpause($cmd);
+   $self->sw->unpause($note || $cmd);
    my $rv = qx{$cmd};
    $self->sw->pause;
 
