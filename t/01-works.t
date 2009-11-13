@@ -51,22 +51,8 @@ eq_or_diff(
 ok( $tb->run_count(10), q{sane} );
 ok( $tb->run, q{things ran},);
 eq_or_diff(
-   $tb->results,
-   [],
+   [map{ref($_)} values %{$tb->results}],
+   [map{'Tool::Bench::Result'}1..4],
+   q{ok so the results look sane}
 );
-=pod lazy peek inside
-eq_or_diff(
-   {$tb->_commands},
-   {},
-   
-);
-=cut
-
-
-__END__
-ok( $tb->run_command('ls',10),
-    q{was able to run tests},
-);
-
-ok( $tb->has_results );
 
