@@ -62,30 +62,36 @@ has run_count => (
    default => 100,
 );
 
+sub cmd_loop {
+   my $self   = shift;
+   my $action = shift;
+   return { map{
+               my $c = $self->_commands->{$_};
+               if ($c->can($action)) {
+                  $_ => $c->$action;
+                  #warn sprintf q{RUN: %s runing %s action.}, ref($c), $action ;
+               }
+               else {
+                  warn sprintf q{!!!FAIL: %s does not have a %s action.}, ref($c), $action ;
+               }
+            } keys %{$self->_commands}
+         };
+}
+
 sub run {shift->run_all_commands_interleaved(@_)}
 sub run_all_commands_interleaved {
    my $self = shift;
 
-   my $cmd_loop = sub{my( $action,@arg ) = @_; 
-                      map{#$self->_commands->{$_}->$action(@arg)
-                          my $c = $self->_commands->{$_};
-                          if ($c->can($action)) {
-                             $c->$action;
-                             warn sprintf q{RUN: %s runing %s action.}, ref($c), $action ;
-                          }
-                          else {
-                             warn sprintf q{!!!FAIL: %s does not have a %s action.}, ref($c), $action ;
-                          }
-                         } keys %{$self->_commands}
-                     };
-
-   #setup
-   $cmd_loop->('run_setup');
+   $self->cmd_loop('run_setup');
    for my $i (1..$self->run_count) {
-      $cmd_loop->('time_run'); 
+      $self->cmd_loop('time_run'); 
    } 
-   $cmd_loop->('run_cleanup');
-   return 'kitten';
+   $self->cmd_loop('run_cleanup');
+}
+
+sub results {
+   my $self = shift;
+   $self->cmd_loop('result');
 }
 
 __PACKAGE__->meta->make_immutable();

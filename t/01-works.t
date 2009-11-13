@@ -49,17 +49,18 @@ eq_or_diff(
 );
 
 ok( $tb->run_count(10), q{sane} );
+ok( $tb->run, q{things ran},);
 eq_or_diff(
-   $tb->run,
-   {},
+   $tb->results,
+   [],
 );
-
+=pod lazy peek inside
 eq_or_diff(
    {$tb->_commands},
    {},
    
 );
-
+=cut
 
 
 __END__
