@@ -51,8 +51,12 @@ eq_or_diff(
 ok( $tb->run_count(10), q{sane} );
 ok( $tb->run, q{things ran},);
 eq_or_diff(
-   [map{ref($_)} values %{$tb->results}],
+   [map{ref($_)} values %{$tb->results_objects}],
    [map{'Tool::Bench::Result'}1..4],
    q{ok so the results look sane}
 );
 
+eq_or_diff(
+   $tb->results,
+   {},
+);
