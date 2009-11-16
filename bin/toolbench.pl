@@ -6,7 +6,7 @@ use warnings;
 BEGIN {
    package Tool::Bench::Runner;
    use Moose;
-   use Data::Dumper;
+   use Data::Dumper; sub D (@) {print Dumper(@_)};
    use JSON;
    with 'MooseX::Getopt';
 
@@ -38,11 +38,20 @@ BEGIN {
    sub report {
       my $self = shift;
       my $type = 'type_'. $self->type;
-      $self->$type( $self->results );
+      my $res  = $self->results;
+      return 'No data found' unless scalar(@$res);
+      $self->$type( $res );
    }
 
    sub type_report {
-      qq{SOME REPORT\n};
+      my ($self,$data) = @_;
+      my $length_longest_cmd = [sort {$b<=>$a} map{length} map{$_->{cmd}} @$data ]->[0];
+      my $fmt_cmd = sprintf qq{%%-%ds}, $length_longest_cmd ;
+      join qq{\n},
+         sprintf( qq{$fmt_cmd  count   min    max   total average}, ''),
+         map { my $row = $_;
+               sprintf qq{$fmt_cmd %5d  %02.4f %02.4f %02.4f %02.4f} , map{$row->{$_}} qw{cmd count min max total average}
+             } sort {$a->{average} <=> $b->{average}} @$data;
    }
 
    sub type_data {
@@ -60,4 +69,4 @@ my $runner = Tool::Bench::Runner->new_with_options();
 
 map{ $runner->add_command($_) } $runner->command;
 $runner->run;
-print $runner->report;
+print $runner->report, qq{\n};
