@@ -8,6 +8,12 @@ BEGIN {
    use Moose;
    use Data::Dumper; sub D (@) {print Dumper(@_)};
    use JSON;
+   use Moose::Util::TypeConstraints;
+
+   subtype 'OrderableFeild'
+      => as 'Str'
+      => where { my $val = $_; grep{ $val eq $_} qw{count min max total average} };
+
    with 'MooseX::Getopt';
 
    has controler => (
@@ -24,6 +30,7 @@ BEGIN {
    has count   => ( is => 'rw', isa => 'Int', default => 100);
    has command => ( is => 'rw', isa => 'ArrayRef', auto_deref=>1, default => sub{[]});
    has type    => ( is => 'rw', isa => 'Str', default => 'report');
+   has order   => ( is => 'rw', isa => 'OrderableFeild', default => 'average' );
 
    # you do not have access to self at the type check state
    sub BUILD {
@@ -33,7 +40,6 @@ BEGIN {
       die sprintf q{!!! FAIL %s is not a valid type because %s is not a valid method}, $self->type, $method
          unless $self->can($method);
    }
-
 
    sub report {
       my $self = shift;
