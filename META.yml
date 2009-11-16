@@ -15,6 +15,7 @@ build_requires:
   POSIX: 0
   Test::More: 0
   Test::Most: 0
+  Capture::Tiny: 0
 configure_requires:
   Module::Build: 0.35
 provides:

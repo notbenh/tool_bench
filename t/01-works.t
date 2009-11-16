@@ -20,7 +20,7 @@ BEGIN {
       results
       clear_results
       has_results
-      run_count
+      count
       run_command
 =cut
 }
@@ -48,7 +48,7 @@ eq_or_diff(
    q{command check},
 );
 
-ok( $tb->run_count(10), q{sane} );
+ok( $tb->count(10), q{sane} );
 ok( $tb->run, q{things ran},);
 eq_or_diff(
    [map{ref($_)} values %{$tb->results}],

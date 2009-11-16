@@ -56,7 +56,7 @@ sub add_command {
    return scalar( keys %{$self->_commands} );
 }
 
-has run_count => (
+has count => (
    is => 'rw',
    isa => 'Int',
    default => 100,
@@ -83,7 +83,7 @@ sub run_all_commands_interleaved {
    my $self = shift;
 
    $self->cmd_loop('run_setup');
-   for my $i (1..$self->run_count) {
+   for my $i (1..$self->count) {
       $self->cmd_loop('time_run'); 
    } 
    $self->cmd_loop('run_cleanup');
@@ -93,89 +93,6 @@ sub results {
    my $self = shift;
    $self->cmd_loop('result');
 }
-
-__PACKAGE__->meta->make_immutable();
-no Moose;
-
-1;
-__END__
-
-
-
-
-has results => (
-   metaclass => 'Collection::Array',
-   is        => 'ro',
-   isa       => 'ArrayRef',
-   lazy      => 1,
-   default   => sub { [] },
-   provides  => {
-      push   => 'add_result',
-   },
-   clearer   => 'clear_results',
-   predicate => 'has_results',
-);
-
-=head1 METHODS
-
-=head2 results
-
-Get an arrayref of all the results currently stored.
-
-=head2 add_results
-
-Add a result to the stack.
-
-=head2 has_results
-
-Have we stored any results yet?
-
-=head2 clear_results
-
-Remove all exisitng results.
-
-=cut
-
-has run_count => (
-   is => 'rw',
-   isa => 'Int',
-   default => 100,
-);
-
-=head2 run_command
-
-Takes a string to run as a comand to run, an integer for how many times to run said command.
-
-Results are stored in results.
-
-=cut
-
-sub run_command {
-   my ($self,$cmd,$count) = @_;
-   my $sw = Benchmark::Stopwatch::Pause->new->start->pause;
-   for (1..($count||$self->run_count)) {
-      $sw->unpause($_);
-      my $rv = qx($cmd); #better trap output for use if needed
-      $sw->pause;
-      # if you want to check the results.... do it here.
-   }
-   $sw->stop;
-
-   my $data = $sw->as_unpaused_data;
-   shift @{$data->{laps}}; # no point in keeping _start_
-   my @times = map{$_->{elapsed_time}} @{$data->{laps}};
-   $self->add_result(
-          { max   => max(@times),
-            min   => min(@times),
-            times => \@times,
-            total => $data->{total_elapsed_time},
-            avg   => (scalar(@times)) ? $data->{total_elapsed_time}/scalar(@times)
-                                      : 0,
-            cmd   => $cmd,
-          }
-   );
-}
-
 
 =head1 AUTHOR
 

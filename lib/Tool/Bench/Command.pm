@@ -1,5 +1,6 @@
 package Tool::Bench::Command;
 use Moose;
+use Capture::Tiny qw{capture};
 
 =head1 Methods
 
@@ -26,6 +27,12 @@ has result => (
       require Tool::Bench::Result;
       Tool::Bench::Result->new;
    },
+);
+
+has show_STDERR => (
+   is => 'rw',
+   isa => 'Bool',
+   default => 0,
 );
 
 use constant DATA   => qw{setup interpreter file command cleanup};
@@ -144,11 +151,12 @@ sub time_run {
    die '!!! NO COMMAND SPECIFIED' unless defined $cmd;
 
    $self->sw->unpause($note || $cmd);
-   my $rv = qx{$cmd};
+   my ($stdout,$stderr) = capture {qx{$cmd}};
    $self->sw->pause;
+   warn $stderr if $self->show_STDERR;
 
    $self->result->add(pop @{[map{$_->{elapsed_time}} @{$self->sw->as_unpaused_data->{laps}}]} )
-      if $self->run_validate->($rv);
+      if $self->run_validate->($stdout);
 }
 
 
