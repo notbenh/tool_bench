@@ -46,7 +46,7 @@ BEGIN {
       my $type = 'type_'. $self->type;
       my $res  = $self->results;
       return 'No data found' unless scalar(@$res);
-      $self->$type( $res );
+      $self->$type( [ sort {$a->{$self->order} <=> $b->{$self->order}} @$res ] );
    }
 
    sub type_report {
@@ -57,7 +57,7 @@ BEGIN {
          sprintf( qq{$fmt_cmd  count   min    max   total average}, ''),
          map { my $row = $_;
                sprintf qq{$fmt_cmd %5d  %02.4f %02.4f %02.4f %02.4f} , map{$row->{$_}} qw{cmd count min max total average}
-             } sort {$a->{average} <=> $b->{average}} @$data;
+             } @$data;
    }
 
    sub type_data {
