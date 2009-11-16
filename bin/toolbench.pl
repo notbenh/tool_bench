@@ -21,8 +21,8 @@ BEGIN {
       handles => [qw{add_command run results}],
    );
 
-   has count   => (is => 'rw', isa => 'Int', default => 100);
-   has command => (is => 'rw', isa => 'ArrayRef', auto_deref=>1, default => sub{[]});
+   has count   => ( is => 'rw', isa => 'Int', default => 100);
+   has command => ( is => 'rw', isa => 'ArrayRef', auto_deref=>1, default => sub{[]});
    has type    => ( is => 'rw', isa => 'Str', default => 'report');
 
    # you do not have access to self at the type check state
@@ -42,20 +42,19 @@ BEGIN {
    }
 
    sub type_report {
-      print 'SOME REPORT';
+      qq{SOME REPORT\n};
    }
 
    sub type_data {
       my ($self,$data) = @_;
-      print Dumper( $data );
+      Dumper( $data );
    }
 
    sub type_json {
       my ($self,$data) = @_;
-      print to_json( $data );
+      to_json( $data );
    }
 };
-
 
 my $runner = Tool::Bench::Runner->new_with_options();
 

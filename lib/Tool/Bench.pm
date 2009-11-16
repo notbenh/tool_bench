@@ -56,7 +56,7 @@ sub add_command {
    return scalar( keys %{$self->_commands} );
 }
 
-has run_count => (
+has count => (
    is => 'rw',
    isa => 'Int',
    default => 100,
@@ -83,7 +83,7 @@ sub run_all_commands_interleaved {
    my $self = shift;
 
    $self->cmd_loop('run_setup');
-   for my $i (1..$self->run_count) {
+   for my $i (1..$self->count) {
       $self->cmd_loop('time_run'); 
    } 
    $self->cmd_loop('run_cleanup');
@@ -103,6 +103,49 @@ sub results {
         } keys %{$self->results_objects}
    ];
 }
+
+=head1 AUTHOR
+
+ben hengst, C<< <notbenh at cpan.org> >>
+
+=head1 BUGS
+
+Please post bugs to github L<http://github.com/notbenh/tool_bench/issues>.
+
+
+=head1 SUPPORT
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc Tool::Bench
+
+You can also look for information at:
+
+=over 4
+
+=item * Project hosted at
+
+L<http://github.com/notbenh/tool_bench>
+
+=back
+
+
+=head1 ACKNOWLEDGEMENTS
+
+Thanks goes to Eric Wilhelm and Jonathan Leto, and the entire euler_bench team for making this possible.
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2009
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of either: the GNU General Public License as published
+by the Free Software Foundation; or the Artistic License.
+
+See http://dev.perl.org/licenses/ for more information.
+
+
+=cut
 
 __PACKAGE__->meta->make_immutable();
 no Moose;
