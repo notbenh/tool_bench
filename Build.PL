@@ -8,6 +8,7 @@ my $builder = Module::Build->new(
     dist_author         => q{ben hengst <notbenh@cpan.org>},
     dist_version_from   => 'lib/Tool/Bench.pm',
     build_requires => {
+        'Capture::Tiny' => 0,
         'Test::More' => 0,
         'Test::Most' => 0,
         'POSIX'      => 0,
