@@ -1,27 +1,50 @@
 package Tool::Bench;
-use Moose;
-use MooseX::AttributeHelpers;
-use Scalar::Util qw{looks_like_number};                                                                                                                               
-use List::Util qw{min max};
-use Benchmark::Stopwatch::Pause;
-use Tool::Bench::Command;
+use strict;
+use warnings;
 
-=head1 NAME
+# ABSTRACT: easy benching
 
-Tool::Bench - Stuff to make Benchmarking easy.
+sub new { bless {}, shift };
 
-=head1 VERSION
+=method add
 
-Version 0.02
-
-=cut
-
-our $VERSION = '0.02';
-
-
-=head1 SYNOPSIS
+  $bench->add( name => { test   => sub{ $_ = qx{echo 'kitten'}; chomp; $_ }, 
+                         expect => 'kitten',
+                         type   => 'equal',
+                       },
+             )
 
 =cut
+
+sub add {
+   my $self = shift;
+   my $name = shift;
+   $name = 'test_'.$name unless $name =~ m/^test_/;
+
+   if ( $self->can($name) ) {
+      warn qq{there is already a test named $name, skipping.};
+      return;
+   }
+
+   my ($cmd, $value, $note) = @{$_[0]};
+   { no strict;
+     *{join '::', __PACKAGE__, $name} = sub{ my $_ = qx{$cmd}; chomp; assert_equal($_, $value, $note) };
+   };
+}
+
+   sub build {
+      my %cmd = @_;
+      foreach my $test (keys %cmd) {
+         add_cmd($test, $cmd{$test});
+      }
+   }
+
+
+
+
+
+
+__END__
 
 has _commands => (
    is => 'rw',
