@@ -13,10 +13,13 @@ BEGIN {
    use_ok('Tool::Bench');
    can_ok('Tool::Bench', qw{
       new
+      instance
+      tests
+      runner
 
       add
       run
-      summary
+      results
       report
    });
 }
@@ -29,7 +32,21 @@ isa_ok(  $tb,
    'Tool::Bench', 
    q{[Tool::Bench] new()},
 );
-is $tb->{instance_class}, 'Tool::Bench::Instance', 'right class for instance';
-isa_ok $tb->{instance}, $tb->{instance_class};
-is_deeply $tb->{commands}, [], 'commands check out';
+isa_ok $tb->instance, 'Tool::Bench::Instance';
 
+cmp_bag( 
+   $tb->add( ls    => {command => 'ls .'},
+             prove => {command => 'prove'},
+           ),
+   [qw{ls prove}],
+);
+
+eq_or_diff(
+   $tb->run(),
+   {},
+);
+
+eq_or_diff(
+   $tb->results(),
+   {},
+);
