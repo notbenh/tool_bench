@@ -56,9 +56,11 @@ sub run {
 sub report {
    my $self = shift;
    my $type = shift || 'Text';
-   eval qq{require Tool::Bench::Report::$type} or die $@; #TODO this is messy
-
-   
+   my $class = qq{Tool::Bench::Report::$type};
+   eval qq{require $class} or die $@; #TODO this is messy
+#die 'CLASS: ', $class;
+   #Tool::Bench::Result::Text->new->report($self->results);
+   $class->new->report($self->results);
 }
 
 
