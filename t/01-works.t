@@ -13,15 +13,10 @@ BEGIN {
    use_ok('Tool::Bench');
    can_ok('Tool::Bench', qw{
       new
-      instance
-      tests
-      runner
-
-      add
       run
       results
-      report
    });
+      #report
 }
 
 #-----------------------------------------------------------------
@@ -32,21 +27,21 @@ isa_ok(  $tb,
    'Tool::Bench', 
    q{[Tool::Bench] new()},
 );
-isa_ok $tb->instance, 'Tool::Bench::Instance';
 
-cmp_bag( 
-   $tb->add( ls    => {command => 'ls .'},
-             prove => {command => 'prove'},
-           ),
-   [qw{ls prove}],
-);
+for (1..3) {
+   ok $tb->run( ls    => {command => 'ls'},
+                sleep => {test    => sub{sleep(1);}},
+                die   => {test    => sub{die 'dead'}},
+              ), 
+      qq{run $_};
+}
 
 eq_or_diff(
-   $tb->run(),
+   $tb->results,
    {},
 );
 
 eq_or_diff(
-   $tb->results(),
+   $tb->report,
    {},
 );
