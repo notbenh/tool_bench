@@ -3,6 +3,8 @@ use Mouse;
 require Tool::Bench::Result;
 use Time::HiRes qw{time};
 
+# ABSTRACT: simple bencher
+
 has results => 
    is => 'rw',
    isa => 'ArrayRef[Tool::Bench::Result]',

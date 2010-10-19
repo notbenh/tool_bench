@@ -36,6 +36,11 @@ for (1..3) {
       qq{run $_};
 }
 
+is scalar(@{ $tb->results}), 9, q{right number of results};
+
+ok $tb->report, q{can report};
+
+__END__
 eq_or_diff(
    $tb->results,
    {},
