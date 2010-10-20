@@ -1,73 +1,84 @@
 package Tool::Bench;
 use Mouse;
 require Tool::Bench::Result;
-use Time::HiRes qw{time};
+use List::Util qw{shuffle};
 
 # ABSTRACT: simple bencher
 
 has items => 
    is => 'rw',
    isa => 'ArrayRef[Tool::Bench::Item]',
+   lazy => 1,
    default => sub{[]},
 ;
 
-=method run
+=method items_count
 
-  $bench->run( simple => { test    => 3,
-                           expect  => 3,
-                           note    => 'defaults to the $name if this key is not specified',
-                         },
-               system => { command => q{echo 'kitten'}, 
-                           expect  => 'kitten',
-                         },
-               true   => { test    => sub{1} }, 
-             )
+The number of stored items.
 
 =cut
 
-sub run {
+sub items_count { scalar( @{ shift->items } ) };
+
+=method add_items
+
+  $bench->add_items( $name => $coderef );
+  $bench->add_items( $name => { before => $coderef,
+                                code   => $coderef,
+                                after  => $coderef,
+                                #varify => $coderef, # currently not implimented
+                              }
+                   );
+
+Before and after events are untimed.
+
+  Return items_count.
+=cut
+
+sub add_items {
+   require Tool::Bench::Item;
    my $self  = shift;
    my %items = @_;
-
-   sub command { 
-      my $cmd = shift;
-      sub{my $_ = qx{$cmd}; chomp; $_};
-   };
-
    for my $name ( keys %items ) {
-      my $conf = { %{ $items{$name} }, name => $name };
-      my $cmd = defined $conf->{command}     ? command($conf->{command})
-              : ref($conf->{test}) eq 'CODE' ? $conf->{test}
-              :                                sub{$conf->{test}} ;
-      $conf->{start_time} = time;
-      eval {
-         $conf->{result}     = &$cmd;
-      } or do {
-         warn qq{ERROR: $@};
-         $conf->{result} = 'ERROR';
-         $conf->{error}  = $@;
-      };
-      $conf->{stop_time}  = time;
+      my $ref = ref($items{$name});
+      my $code = $ref eq 'CODE' ? $items{$name}
+               : $ref eq 'HASH' ? $items{$name}->{code}
+               :                  undef;
+      my $item = Tool::Bench::Item->new( name => $name, code => $code );
+      if( $ref eq 'HASH' ) {
+         $item->meta->add_before_method_modifier('run', $items{$name}->{before})
+            if exists $items{$name}->{before} && ref($items{$name}->{before}) eq 'CODE';
+         $item->meta->add_after_method_modifier('run', $items{$name}->{after})
+            if exists $items{$name}->{after} && ref($items{$name}->{after}) eq 'CODE';
+      }
 
-      push @{ $self->results }, 
-           Tool::Bench::Result->new( %$conf );
+      push @{$self->items}, $item;
    }
-   scalar( @{ $self->results } );
+   return $self->items_count;
 }
 
+sub run {
+   my $self  = shift;
+   my $times = shift || 1;
+   foreach my $i (1..$times) {
+      foreach my $item ( shuffle( @{ $self->items } ) ) {
+         $item->run;
+      }
+   }
+}
+
+
+#---------------------------------------------------------------------------
+#  REPORTING
+#---------------------------------------------------------------------------
 sub report {
    my $self = shift;
    my $type = shift || 'Text';
    my $class = qq{Tool::Bench::Report::$type};
    eval qq{require $class} or die $@; #TODO this is messy
-#die 'CLASS: ', $class;
    #Tool::Bench::Result::Text->new->report($self->results);
-   $class->new->report($self->results);
+   $class->new->report($self->items);
 }
-
-
-
-
 
 no Mouse;
 1;
