@@ -35,13 +35,26 @@ BEGIN {
 
 
 };
-__END__
+
 #-----------------------------------------------------------------
 #  
 #-----------------------------------------------------------------
-ok my $i  = Tool::Bench::Item->new(name => 'ls', code => sub{qx{ls}});
-isa_ok $i, 'Tool::Bench::Item';
+my $items = { ls  => sub{qx{ls}},
+              die => sub{die},
+            };
 
+for my $name ( keys %$items ) {
+
+   ok my $i  = Tool::Bench::Item->new(name => $name, code => $items->{$name} ), qq{[$name] build item};
+   ok $i->run, qq{[$name] running};
+   ok $i->run(3), qq{[$name] running with built in looping};
+   is $i->total_runs, 4, q{run count is correct};
+
+   for (qw{results times errors}) {
+      eq_or_diff( $i->$_, {}, qq{[$name] $_} );
+   }
+
+}
 
 
 

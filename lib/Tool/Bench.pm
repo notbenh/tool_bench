@@ -5,9 +5,9 @@ use Time::HiRes qw{time};
 
 # ABSTRACT: simple bencher
 
-has results => 
+has items => 
    is => 'rw',
-   isa => 'ArrayRef[Tool::Bench::Result]',
+   isa => 'ArrayRef[Tool::Bench::Item]',
    default => sub{[]},
 ;
 
