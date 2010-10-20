@@ -33,6 +33,20 @@ has code =>
    required => 1,
 ;
 
+has [qw{buildup teardown}] => 
+   is => 'ro',
+   isa => 'CodeRef',
+   default => sub{sub{}},
+;
+
+=attr buildup
+
+A CodeRef that is executed everytime before 'run' is called.
+
+=attr teardown
+
+A CodeRef that is executed everytime after 'run' is called.
+
 =attr results
 
 An ArrayRef that contains all the results.
@@ -61,6 +75,9 @@ has [qw{results times errors}]  =>
 Execute code and capture results, errors, and the time for each run.
 
 =cut
+
+before run => sub{ shift->buildup->()  };
+after  run => sub{ shift->teardown->() };
 
 sub run {
    my $self = shift;
@@ -104,9 +121,10 @@ The number of runs that we've captured thus far.
 
 =cut
 
-sub total_time { sum( shift->times ) }
-sub min_time   { min( shift->times ) }
-sub max_time   { max( shift->times ) }
+sub total_time { sum @{shift->times} }
+sub min_time   { min @{shift->times} }
+sub max_time   { max @{shift->times} }
+
 sub avg_time   { 
    my $self = shift;
    $self->total_time / $self->total_runs

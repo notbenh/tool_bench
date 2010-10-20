@@ -23,14 +23,13 @@ sub items_count { scalar( @{ shift->items } ) };
 =method add_items
 
   $bench->add_items( $name => $coderef );
-  $bench->add_items( $name => { before => $coderef,
-                                code   => $coderef,
-                                after  => $coderef,
-                                #varify => $coderef, # currently not implimented
+  $bench->add_items( $name => { startup  => $coderef,
+                                code     => $coderef,
+                                teardown => $coderef,
+                                #varify  => $coderef, # currently not implimented
                               }
                    );
-
-Before and after events are untimed.
+Startup and Teardown are untimed.
 
   Return items_count.
 =cut
@@ -41,18 +40,11 @@ sub add_items {
    my %items = @_;
    for my $name ( keys %items ) {
       my $ref = ref($items{$name});
-      my $code = $ref eq 'CODE' ? $items{$name}
-               : $ref eq 'HASH' ? $items{$name}->{code}
-               :                  undef;
-      my $item = Tool::Bench::Item->new( name => $name, code => $code );
-      if( $ref eq 'HASH' ) {
-         $item->meta->add_before_method_modifier('run', $items{$name}->{before})
-            if exists $items{$name}->{before} && ref($items{$name}->{before}) eq 'CODE';
-         $item->meta->add_after_method_modifier('run', $items{$name}->{after})
-            if exists $items{$name}->{after} && ref($items{$name}->{after}) eq 'CODE';
-      }
+      my $new = $ref eq 'CODE' ? {code => $items{$name}}
+              : $ref eq 'HASH' ? $items{$name}
+              :                  {};
 
-      push @{$self->items}, $item;
+      push @{$self->items}, Tool::Bench::Item->new( name => $name, %$new );
    }
    return $self->items_count;
 }
@@ -60,11 +52,14 @@ sub add_items {
 sub run {
    my $self  = shift;
    my $times = shift || 1;
+   my $count = 0;
    foreach my $i (1..$times) {
       foreach my $item ( shuffle( @{ $self->items } ) ) {
          $item->run;
+         $count++;
       }
    }
+   $count; # seems completely pointless but should return something at least margenly useful
 }
 
 

@@ -5,22 +5,18 @@ use List::Util qw{min max sum };
 sub report {
    my $self    = shift;
    my $results = shift;
-   my $out     = {};
-   foreach my $result (@$results) {
-      push @{$out->{$result->name}}, $result->total_time;
-   }
 
+use Util::Log;
    join qq{\n},
       q{ min   max  total  avg  count name},
-      map{ my @times = @{$out->{$_}};
-           sprintf q{%0.3f %0.3f %0.3f %0.3f % 5d %s},
-                   min( @times ),
-                   max( @times ),
-                   sum( @times ),
-                   sum( @times )/scalar(@times),
-                   scalar(@times),
-                   $_,
-         } keys %$out;
+      map{ sprintf q{%0.3f %0.3f %0.3f %0.3f % 5d %s},
+                   $_->min_time,
+                   $_->max_time,
+                   $_->total_time,
+                   $_->avg_time,
+                   $_->total_runs,
+                   $_->name,
+         } sort {$a->total_time <=> $b->total_time} @$results
 };
 
 1;
