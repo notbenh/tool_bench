@@ -48,6 +48,13 @@ sub add_items {
    return $self->items_count;
 }
 
+=method run
+
+  $bench->run; # fire off the run method of all known items in shuffled order
+  $bench->run(3); # run all items 3 times, random order non-sequential runs
+
+=cut
+
 sub run {
    my $self  = shift;
    my $times = shift || 1;
