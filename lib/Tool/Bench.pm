@@ -1,6 +1,5 @@
 package Tool::Bench;
 use Mouse;
-require Tool::Bench::Result;
 use List::Util qw{shuffle};
 
 # ABSTRACT: simple bencher
@@ -71,7 +70,6 @@ sub report {
    my $type = shift || 'Text';
    my $class = qq{Tool::Bench::Report::$type};
    eval qq{require $class} or die $@; #TODO this is messy
-   #Tool::Bench::Result::Text->new->report($self->results);
    $class->new->report($self->items);
 }
 
