@@ -48,4 +48,4 @@ is $tb->items->[0]->total_runs, 4, q{items were run 4 times each};
 is $before, 4, q{startup ran the correct number of times};
 is $after, 4,  q{teardown ran the correct number of times};
 
-#eq_or_diff( $tb->report, {},);
+ok $tb->report, q{can get a report};
