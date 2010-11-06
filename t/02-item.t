@@ -4,11 +4,9 @@ use strict;
 use warnings;
 
 use Test::Most qw{no_plan};
-use Carp::Always;
+use Data::Dumper;
+#use Carp::Always;
 
-#-----------------------------------------------------------------
-#  
-#-----------------------------------------------------------------
 BEGIN {
 
    require_ok('Tool::Bench::Item');
@@ -19,7 +17,7 @@ BEGIN {
       name
       code
       results
-      times 
+      times
       errors
 
       run
@@ -30,17 +28,14 @@ BEGIN {
       avg_time
 
       total_runs
-      
    });
 
 
 };
 
-#-----------------------------------------------------------------
-#  
-#-----------------------------------------------------------------
-my $items = { ls  => sub{qx{ls}},
-              die => sub{die},
+my $items = {
+                ls  => sub{qx{ls}},
+                die => sub{die},
             };
 
 for my $name ( keys %$items ) {
@@ -49,13 +44,12 @@ for my $name ( keys %$items ) {
    ok $i->run, qq{[$name] running};
    ok $i->run(3), qq{[$name] running with built in looping};
    is $i->total_runs, 4, q{run count is correct};
+   cmp_ok( @{$i->times}, '==', 4, 'got the right number of times' );
 
-   #for (qw{results times errors}) {
-   #   eq_or_diff( $i->$_, {}, qq{[$name] $_} );
-   #}
+   map { cmp_ok( $_, '>=', 0, 'all times are positive') } @{$i->times};
 
+   # should we have 4 empty error strings, or no errors?
+   cmp_ok( @{$i->errors}, '==', 4, 'got the right number of errors' );
+
+   cmp_ok( @{$i->results}, '==', 4, 'got the right number of results' );
 }
-
-
-
-
