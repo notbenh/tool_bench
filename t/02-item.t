@@ -44,9 +44,12 @@ for my $name ( keys %$items ) {
    ok $i->run, qq{[$name] running};
    ok $i->run(3), qq{[$name] running with built in looping};
    is $i->total_runs, 4, q{run count is correct};
+
+   is $i->name, $name, "name = $name";
+
    cmp_ok( @{$i->times}, '==', 4, 'got the right number of times' );
 
-   map { cmp_ok( $_, '>=', 0, 'all times are positive') } @{$i->times};
+   map { cmp_ok( $_, '>=', 0, 'all times are non-negative' ) } @{$i->times};
 
    # should we have 4 empty error strings, or no errors?
    cmp_ok( @{$i->errors}, '==', 4, 'got the right number of errors' );
