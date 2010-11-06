@@ -1,6 +1,7 @@
 #!/usr/bin/perl 
 use strict;
 use warnings;
+#use Carp::Always;
 
 =head1 WHAT?
 
@@ -37,7 +38,7 @@ BEGIN {
 
    enum 'ReportType' => qw(Text JSON); # TODO: this should be automated? or just let it fail if theres a non-valid type?
 
-   has format => 
+   has format =>
       is => 'rw',
       isa => 'ReportType',
       default => 'text',
@@ -49,7 +50,10 @@ BEGIN {
       my $cmd = join ' ', $self->interp, $self->file;
       $bench->add_items( $self->file => sub{qx{$cmd}});
       $bench->run($self->count);
-      print $bench->report($self->format);
+      print $bench->report(
+        format => $self->format,
+        interp => $self->interp,
+      );
       return 0;
    }
 };

@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use Test::Most qw{no_plan};
+#use Carp::Always;
 
 #-----------------------------------------------------------------
 #  
@@ -48,6 +49,6 @@ is $tb->items->[0]->total_runs, 4, q{items were run 4 times each};
 is $before, 4, q{startup ran the correct number of times};
 is $after, 4,  q{teardown ran the correct number of times};
 
-ok $tb->report, q{can get a report};
+ok $tb->report(format => 'Text'), q{can get a Text report};
 #eq_or_diff $tb->report('JSON'), {}, q{can get a report};
-ok $tb->report('JSON'), q{can get a json report};
+ok $tb->report(format => 'JSON'), q{can get a json report};

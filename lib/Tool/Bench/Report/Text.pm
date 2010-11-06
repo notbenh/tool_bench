@@ -14,8 +14,7 @@ use List::Util qw{min max sum };
 =cut
 
 sub report {
-   my $self    = shift;
-   my $results = shift;
+   my ($self,%args) = @_;
 
    join qq{\n},
       q{ min   max  total  avg  count name},
@@ -26,7 +25,7 @@ sub report {
                    $_->avg_time,
                    $_->total_runs,
                    $_->name,
-         } sort {$a->total_time <=> $b->total_time} @$results
+         } sort {$a->total_time <=> $b->total_time} @{$args{items}}
 };
 
 1;
