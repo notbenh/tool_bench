@@ -2,9 +2,10 @@ blib*
 Makefile
 Makefile.old
 Build
-_build*
+.build*
 pm_to_blib*
 *.tar.gz
 .lwpcookies
 Tool-Bench-*
 cover_db
+.*\.sw?
