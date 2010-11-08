@@ -30,6 +30,11 @@ BEGIN {
       required => 1,
    ;
 
+   has [qw{note name}] => 
+      is => 'rw',
+      isa => 'Str',
+   ;
+
    has count => 
       is => 'rw',
       isa => 'Int',
@@ -48,7 +53,10 @@ BEGIN {
       my $self = shift;
       my $bench= Tool::Bench->new;
       my $cmd = join ' ', $self->interp, $self->file;
-      $bench->add_items( $self->file => sub{qx{$cmd}});
+      $bench->add_items( $self->name || $self->file => { code => sub{qx{$cmd}}, 
+                                                         note => $self->note
+                                                       }
+                       );
       $bench->run($self->count);
       print $bench->report(
         format => $self->format,

@@ -28,7 +28,7 @@ use Data::Dumper;
 sub report {
    my ($self,%args)  = @_;
 
-   my @report_items = qw{ min_time   max_time total_time avg_time total_runs name times };
+   my @report_items = qw{ min_time max_time total_time avg_time total_runs name note times }; #this is kinda janky
 
    encode_json( [ map { my $item = $_;
                        my $x =
