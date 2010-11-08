@@ -39,6 +39,12 @@ has [qw{buildup teardown}] =>
    default => sub{sub{}},
 ;
 
+has note => 
+   is => 'ro',
+   isa => 'Str',
+   default => '',
+;
+
 =attr buildup
 
 A CodeRef that is executed everytime before 'run' is called.
@@ -46,6 +52,10 @@ A CodeRef that is executed everytime before 'run' is called.
 =attr teardown
 
 A CodeRef that is executed everytime after 'run' is called.
+
+=attr note
+
+A string to better explain the item.
 
 =attr results
 

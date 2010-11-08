@@ -36,6 +36,7 @@ ok $tb->add_items( ls  => sub{qx{ls}} ), q{add item pair};
 ok $tb->add_items( die => { code     => sub{die},
                             buildup  => sub{$before++},
                             teardown => sub{$after++},
+                            note     => 'Just how long does it take to die?',
                           },
                  ), q{add item hash} ;
 ok $tb->add_items( true => sub{1}, sleep => sub{sleep(1)}), q{add more then one item};
