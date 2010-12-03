@@ -3,7 +3,57 @@ use Mouse;
 use List::Util qw{shuffle};
 use Data::Dumper;
 
-# ABSTRACT: simple bencher
+# ABSTRACT: simple bencher tool kit
+
+=head1 SYNOPSIS 
+
+Ok so I'm sure your asking your self, yet another benchmarking suit? Sure 
+there are many others but this one is not for perl specifcly. Think of 
+Tool::Bench more as a jazzy version of the unix 'time' command it just
+happens to be written in perl. With 'time' you have a very simple wrap a clock
+around this comand for one run.  Tool::Bench goes a bit further by wrapping 
+a clock around the execution of an number of CodeRef, run as many times as 
+you want. Then because all these times are stored you can build reports from
+the results of all these runs.
+
+That said Tool::Bench is specificly designed to just be the clock engine, 
+you have to draw the line somewhere. So here's a quick example of useage.
+
+
+  use Tool::Bench;
+  my $bench = Tool::Bench->new;
+
+  # simplest case: add a code ref with a name
+  $bench->add_items( simple => sub{...} );
+
+  # slightly more complex item: now with events
+  $bench->add_items( complex => { startup  => sub{...},
+                                  code     => sub{...},
+                                  teardown => sub{...},
+                                },
+                   );
+
+  # add items can takes a hash so you can add more then one item
+  $bench->add_items( name1 => sub{...}, 
+                     name2 => { startup => sub{...},
+                                code    => sub{...},  
+                              },
+                     name3 => sub{...},
+                   );
+
+  # now that your all set up, you'll want to run them
+  # lets say that you want to run each item 3 times
+  $bench->run(3);
+
+  # now you've got a bunch of data stored off... lets do something with it.
+
+  $bench->report(format => 'Text');
+  
+=attribute items
+
+This is the store for all the items to be bench marked.
+
+=cut
 
 has items => 
    is => 'rw',
@@ -14,7 +64,7 @@ has items =>
 
 =method items_count
 
-The number of stored items.
+Returns the count of the number of items currently stored.
 
 =cut
 
