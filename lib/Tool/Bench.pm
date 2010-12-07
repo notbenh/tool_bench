@@ -137,6 +137,17 @@ sub run {
 
 =method report
 
+Lastly, once you've run the items, you'll likely want to mine them and build 
+a report. The report method by default will return a Text report, though you
+can ask for other formats. The 'format' value is expected to be the last part 
+of the class to generate the report. 
+
+  $bench->report(format => 'Text'); # uses Tool::Bench::Report::Text
+  $bench->report(format => 'JSON'); # uses Tool::Bench::Report::JSON
+
+By using class names you can build your own report simply, see 
+L<Tool::Bench::Report::Text> for more info on how to build report types.
+
 =cut
 
 sub report {
