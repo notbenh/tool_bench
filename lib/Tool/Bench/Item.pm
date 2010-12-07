@@ -5,11 +5,48 @@ use Time::HiRes qw{time};
 
 # ABSTRACT: A single item to be benchmarked
 
+=head1 SYNOPSIS 
+
+Here you are, looking at the object for one specific item. At this level things
+start to look much more like the unix 'time' command as this is a clock wrapped
+around a single 'item'. 
+
+As a matter of comparison, lets look at a simple example:
+
+  time perl -e 'for(1..3){print $_}'
+
+As a Tool::Bench::Item things would look something like:
+
+  my $item = Tool::Bench::Item->new(
+                  name => 'Example',
+                  code => sub{qx{perl -e 'for(1..3){print $_}'}},
+                  # to be fair we call perl again to include compile time
+             );
+  $item->run;
+  printf qq{%0.3f\n} $item->times->[0];
+
+This is a very simple example, with very simular outcomes. But there's more 
+that an item provides, speciflcy the startup and teardown events. These are 
+untimed CodeRefs that get run before and after the core 'code'. 
+
+Here is another set of examples comparing to 'time':
+
+  echo 'hello' > /tmp/example && time cat /tmp/example && rm /tmp/example
+
+  Tool::Bench::Item->new(
+      name     => 'Example with startup and teardown',
+      startup  => sub{qx{echo 'hello' > /tmp/example}},
+      code     => sub{qx{cat /tmp/example}},
+      teardown => sub{qx{rm /tmp/example}},
+  )->run;
+
+In both cases we only timed 'cat' not 'echo' or 'rm'. 
+
 =attr name
 
 REQUIRED.
 
-Stores the name of the item.
+Stores a string name for this item.
 
 =cut
 
@@ -47,15 +84,15 @@ has note =>
 
 =attr buildup
 
-A CodeRef that is executed everytime before 'run' is called.
+An untimed CodeRef that is executed everytime before 'run' is called.
 
 =attr teardown
 
-A CodeRef that is executed everytime after 'run' is called.
+Ain untimed CodeRef that is executed everytime after 'run' is called.
 
 =attr note
 
-A string to better explain the item.
+An optional string to better explain the item.
 
 =attr results
 
