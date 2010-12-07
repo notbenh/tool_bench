@@ -51,7 +51,8 @@ you have to draw the line somewhere. So here's a quick example of useage.
   
 =attribute items
 
-This is the store for all the items to be bench marked.
+This is the store for all the items to be bench marked. When called directly
+you will get an arrayref of Item objects. 
 
 =cut
 
@@ -78,10 +79,13 @@ sub items_count { scalar( @{ shift->items } ) };
                                 teardown => $coderef,
                                 #varify  => $coderef, # currently not implimented
                               }
+                     ...
                    );
-Startup and Teardown are untimed.
 
-  Return items_count.
+This method will take your input and build new Item objects and store them 
+in the items stack. See L<Tool::Bench::Item> for more info on the events.
+
+Returns items_count.
 =cut
 
 sub add_items {
@@ -101,8 +105,15 @@ sub add_items {
 
 =method run
 
+
+When you are done adding all your items, you'll want to run them. Run takes an
+int that refers to the number of times that you want to run each item, the 
+default is 1. 
+
   $bench->run; # fire off the run method of all known items in shuffled order
   $bench->run(3); # run all items 3 times, random order non-sequential runs
+
+Returns the number of times that it ran each item. 
 
 =cut
 
@@ -110,7 +121,7 @@ sub run {
    my $self  = shift;
    my $times = shift || 1;
    my $count = 0;
-   foreach my $i (1..$times) {
+   foreach my $i (1..int($times)) {
       foreach my $item ( shuffle( @{ $self->items } ) ) {
          $item->run;
          $count++;
@@ -123,6 +134,11 @@ sub run {
 #---------------------------------------------------------------------------
 #  REPORTING
 #---------------------------------------------------------------------------
+
+=method report
+
+=cut
+
 sub report {
    my ($self, %args) = @_;
    my $type = $args{format} || 'Text';
