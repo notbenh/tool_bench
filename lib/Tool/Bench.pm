@@ -127,7 +127,7 @@ sub run {
          $count++;
       }
    }
-   $count; # seems completely pointless but should return something at least margenly useful
+   $count; # seems completely pointless but should return something at least marginally useful
 }
 
 
