@@ -42,7 +42,9 @@ Here is another set of examples comparing to 'time':
 
 In both cases we only timed 'cat' not 'echo' or 'rm'. 
 
-=attr name
+=head1 ATTRIBUTES
+
+=head2 name
 
 REQUIRED.
 
@@ -56,7 +58,7 @@ has name =>
    required => 1,
 ;
 
-=attr code
+=head2 code
 
 REQUIRED.
 
@@ -82,27 +84,27 @@ has note =>
    default => '',
 ;
 
-=attr buildup
+=head2 buildup
 
 An untimed CodeRef that is executed everytime before 'run' is called.
 
-=attr teardown
+=head2 teardown
 
 Ain untimed CodeRef that is executed everytime after 'run' is called.
 
-=attr note
+=head2 note
 
 An optional string to better explain the item.
 
-=attr results
+=head2 results
 
 An ArrayRef that contains all the results.
 
-=attr times
+=head2 times
 
 An ArrayRef that contains all the times that a specific run took.
 
-=attr errors
+=head2 errors
 
 An ArrayRef that contains all any errors that were captured.
 
@@ -114,7 +116,9 @@ has [qw{results times errors}]  =>
    default => sub{[]},
 ;
 
-=method run
+=head1 METHODS
+
+=head2 run
 
   $item->run;    # a single run
   $item->run(3); # run the code 3 times
@@ -146,23 +150,23 @@ sub run {
 #---------------------------------------------------------------------------
 #  REPORTING HOOKS
 #---------------------------------------------------------------------------
-=method total_time
+=head2 total_time
 
 The total time that all runs took to execute.
 
-=method min_time
+=head2 min_time
 
 The fastest execute time.
 
-=method max_time 
+=head2 max_time 
 
 The slowest execute time.
 
-=method avg_time
+=head2 avg_time
 
 The averge execute time, total_time / total_runs.
 
-= method total_runs
+= head2 total_runs
 
 The number of runs that we've captured thus far.
 

@@ -26,9 +26,9 @@ everything.
   0.002 0.002 0.009 0.002     4 ls [some note]
   1.000 1.000 4.000 1.000     4 sleep
 
-=cut
+=head1 METHODS
 
-=method report
+=head2 report
 
 This is the method that $bench->report will call to build the actual report. 
 The most important thing that is passed along by $bench is the item objects.
