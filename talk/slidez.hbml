@@ -35,38 +35,44 @@ $bench->add_items( true => sub{1} );
 $bench->run;
 print $bench->report;
 
-}}}}}
+}}}
+}
     }
     slide{
         h3{Example 1}
         code{pre{{{min   max  total  avg   count name
 0.000 0.000 0.000 0.000     1 true 
 
-}}}}}
+}}}
+}
     }
     slide{
         h3{Example 1, build the object}
         code{pre{{{my $bench = Tool::Bench->new();
 
-}}}}}
+}}}
+}
     }
     slide{
         h3{Example 1, add an item to time}
         code{pre{{{$bench->add_items( true => sub{1} );
 
-}}}}}
+}}}
+}
     }
     slide{
         h3{Example 1, run it}
         code{pre{{{$bench->run;
 
-}}}}}
+}}}
+}
     }
     slide{
         h3{Example 1, print our report}
         code{pre{{{print $bench->report;
 
-}}}}}
+}}}
+}
     }
     slide{
         h3{Example 2}
@@ -81,7 +87,8 @@ $bench->add_items( true   => sub{1},
 $bench->run(3);
 print $bench->report;
 
-}}}}}
+}}}
+}
     }
     slide{
         h3{Example 2}
@@ -90,7 +97,8 @@ print $bench->report;
 0.000 0.000 0.000 0.000     3 false 
 1.000 1.000 3.000 1.000     3 more [taking a nap]
 
-}}}}}
+}}}
+}
     }
     slide{
         h3{Example 2, added many items}
@@ -101,13 +109,15 @@ print $bench->report;
                              },
                  );
 
-}}}}}
+}}}
+}
     }
     slide{
         h3{Example 2, ran each item 3 times}
         code{pre{{{$bench->run(3);
 
-}}}}}
+}}}
+}
     }
     slide{
         h3{Example 3}
@@ -125,7 +135,8 @@ $bench->add_items( true   => sub{1},
 $bench->run(3);
 print $bench->report(format => 'JSON');
 
-}}}}}
+}}}
+}
     }
     slide{
         h3{Example 3}
@@ -170,7 +181,8 @@ print $bench->report(format => 'JSON');
  }
 ];
 
-}}}}}
+}}}
+}
     }
     slide{
         h3{Example 3, events}
@@ -183,13 +195,15 @@ print $bench->report(format => 'JSON');
                              },
                  );
 
-}}}}}
+}}}
+}
     }
     slide{
         h3{Example 3, report formats}
         code{pre{{{print $bench->report(format => 'JSON');
 
-}}}}}
+}}}
+}
     }
     slide{
         h3{Parrot Team}

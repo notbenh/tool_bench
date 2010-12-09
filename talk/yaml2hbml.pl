@@ -40,7 +40,7 @@ sub IN(@) {
    my $pad  = join '', map{$indent} 1..shift;
    my $text = shift || '';
    my $trinket = shift || '';
-   say $pad, $trinket || '', $text =~ m/\n/ ? qq|code{pre{{{$text\n}}}}| : $text ;
+   say $pad, $trinket || '', $text =~ m/\n/ ? qq|code{pre{{{$text\n}}}\n}| : $text ;
 };
 sub is_array ($) {ref(shift) eq 'ARRAY'};
 sub is_hash  ($) {ref(shift) eq 'HASH'};
