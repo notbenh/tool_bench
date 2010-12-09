@@ -29,42 +29,48 @@ slides{
     }
     slide{
         h3{Example 1}
-        pre{code{use Tool::Bench;
+        code{pre{{{use Tool::Bench;
 my $bench = Tool::Bench->new();
 $bench->add_items( true => sub{1} );
 $bench->run;
 print $bench->report;
-}}
+
+}}}}}
     }
     slide{
         h3{Example 1}
-        pre{code{min   max  total  avg   count name
+        code{pre{{{min   max  total  avg   count name
 0.000 0.000 0.000 0.000     1 true 
-}}
+
+}}}}}
     }
     slide{
         h3{Example 1, build the object}
-        pre{code{my $bench = Tool::Bench->new();
-}}
+        code{pre{{{my $bench = Tool::Bench->new();
+
+}}}}}
     }
     slide{
         h3{Example 1, add an item to time}
-        pre{code{$bench->add_items( true => sub{1} );
-}}
+        code{pre{{{$bench->add_items( true => sub{1} );
+
+}}}}}
     }
     slide{
         h3{Example 1, run it}
-        pre{code{$bench->run;
-}}
+        code{pre{{{$bench->run;
+
+}}}}}
     }
     slide{
         h3{Example 1, print our report}
-        pre{code{print $bench->report;
-}}
+        code{pre{{{print $bench->report;
+
+}}}}}
     }
     slide{
         h3{Example 2}
-        pre{code{use Tool::Bench;
+        code{pre{{{use Tool::Bench;
 my $bench = Tool::Bench->new();
 $bench->add_items( true   => sub{1}, 
                    false  => sub{0},
@@ -74,34 +80,38 @@ $bench->add_items( true   => sub{1},
                  );
 $bench->run(3);
 print $bench->report;
-}}
+
+}}}}}
     }
     slide{
         h3{Example 2}
-        pre{code{min   max  total  avg   count name
+        code{pre{{{min   max  total  avg   count name
 0.000 0.000 0.000 0.000     3 true 
 0.000 0.000 0.000 0.000     3 false 
 1.000 1.000 3.000 1.000     3 more [taking a nap]
-}}
+
+}}}}}
     }
     slide{
         h3{Example 2, added many items}
-        pre{code{$bench->add_items( true   => sub{1}, 
+        code{pre{{{$bench->add_items( true   => sub{1}, 
                    false  => sub{0},
                    more   => { code => sub{sleep(1)},
                                note => 'taking a nap',
                              },
                  );
-}}
+
+}}}}}
     }
     slide{
         h3{Example 2, ran each item 3 times}
-        pre{code{$bench->run(3);
-}}
+        code{pre{{{$bench->run(3);
+
+}}}}}
     }
     slide{
         h3{Example 3}
-        pre{code{use Tool::Bench;
+        code{pre{{{use Tool::Bench;
 my $bench = Tool::Bench->new();
 my $naptime;
 $bench->add_items( true   => sub{1}, 
@@ -114,11 +124,12 @@ $bench->add_items( true   => sub{1},
                  );
 $bench->run(3);
 print $bench->report(format => 'JSON');
-}}
+
+}}}}}
     }
     slide{
         h3{Example 3}
-        pre{code{[{ 'max_time' => '5.00679016113281e-06',
+        code{pre{{{[{ 'max_time' => '5.00679016113281e-06',
    'min_time' => '3.09944152832031e-06',
    'avg_time' => '4.05311584472656e-06',
    'name' => 'false',
@@ -158,11 +169,12 @@ print $bench->report(format => 'JSON');
               ]
  }
 ];
-}}
+
+}}}}}
     }
     slide{
         h3{Example 3, events}
-        pre{code{$bench->add_items( true   => sub{1}, 
+        code{pre{{{$bench->add_items( true   => sub{1}, 
                    false  => sub{0},
                    more   => { code     => sub{sleep($naptime)},
                                note     => 'taking a nap',
@@ -170,12 +182,14 @@ print $bench->report(format => 'JSON');
                                teardown => sub{$naptime = 1},
                              },
                  );
-}}
+
+}}}}}
     }
     slide{
         h3{Example 3, report formats}
-        pre{code{print $bench->report(format => 'JSON');
-}}
+        code{pre{{{print $bench->report(format => 'JSON');
+
+}}}}}
     }
     slide{
         h3{Parrot Team}

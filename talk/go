@@ -1,2 +1,2 @@
 #!/bin/sh
-./yaml2hbml.pl slidez.yaml  > slidez.hbml && slidez -i slidez.hbml -d slidez && ls slidez/*.html | perl -MFile::Slurp -e 'while(<>){chomp; my $f=read_file($_); $f=~s|<sub>|sub{|g; $f=~s|</sub>|}|g; write_file($_,$f);}'
+./yaml2hbml.pl slidez.yaml  > slidez.hbml && slidez -i slidez.hbml -d slidez 
