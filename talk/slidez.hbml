@@ -5,7 +5,7 @@ slides{
     }
     slide{
         h3{benchmark framework?}
-        Well think of this as a bunch of candy around the ideea of unix 'time'.
+        Well think of this as a bunch of candy around the idea of unix 'time'.
     }
     slide{
         h3{Goals}

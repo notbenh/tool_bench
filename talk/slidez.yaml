@@ -1,6 +1,6 @@
 ---
 - Tool::Bench : an attempt at an easy benchmarking framework
-- benchmark framework? : Well think of this as a bunch of candy around the ideea of unix 'time'.
+- benchmark framework? : Well think of this as a bunch of candy around the idea of unix 'time'.
 - Goals :
    - be able to benchmark anything
    - easy to play with
