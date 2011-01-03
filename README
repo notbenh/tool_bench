@@ -1,0 +1,4 @@
+Tool Bench: The Tools For Benching
+
+Tool Bench is a generic framework for running benchmarks. It can generate output in plain text and JSON currently,
+and supports plugins for other formats.
