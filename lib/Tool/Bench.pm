@@ -5,6 +5,10 @@ use Data::Dumper;
 
 # ABSTRACT: Tool Bench is a generic framework for running benchmarks.
 
+=head1 NAME 
+
+Tool::Bench - Tool Bench is a generic framework for running benchmarks.
+
 =head1 SYNOPSIS 
 
 Ok so I'm sure your asking your self, yet another benchmarking suit? Sure 
