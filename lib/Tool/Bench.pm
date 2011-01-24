@@ -3,7 +3,7 @@ use Mouse;
 use List::Util qw{shuffle};
 use Data::Dumper;
 
-# ABSTRACT: simple bencher tool kit
+# ABSTRACT: Tool Bench is a generic framework for running benchmarks.
 
 =head1 SYNOPSIS 
 
