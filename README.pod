@@ -1,19 +1,18 @@
-=head1  Tool::Bench - Tool Bench is a generic framework for running benchmarks.
+=head1  Tool::Bench - A Generic Benchmark Framework
 
-=head1 SYNOPSIS 
+=head1 SYNOPSIS
 
-Ok so I'm sure your asking your self, yet another benchmarking suit? Sure 
-there are many others but this one is not for perl specifcly. Think of 
-Tool::Bench more as a jazzy version of the unix 'time' command it just
-happens to be written in perl. With 'time' you have a very simple wrap a clock
-around this comand for one run.  Tool::Bench goes a bit further by wrapping 
-a clock around the execution of an number of CodeRef, run as many times as 
-you want. Then because all these times are stored you can build reports from
-the results of all these runs.
+Ok so I'm sure your asking your self, yet another benchmarking suit? Sure there
+are many others but this one is not specific to Perl. Think of Tool::Bench more
+as a jazzy version of the unix 'time' command it just happens to be written in
+perl. With 'time' you have a very simple wrap a clock around this command for
+one run.  Tool::Bench goes a bit further by wrapping a clock around the
+execution of an number of CodeRef, run as many times as you want. Then because
+all these times are stored you can build reports from the results of all these
+runs.
 
-That said Tool::Bench is specificly designed to just be the clock engine, 
-you have to draw the line somewhere. So here's a quick example of useage.
-
+That said Tool::Bench is designed to just be the clock engine, you
+have to draw the line somewhere. So here's a quick example of usage.
 
   use Tool::Bench;
   my $bench = Tool::Bench->new;
@@ -49,7 +48,7 @@ you have to draw the line somewhere. So here's a quick example of useage.
 =head2 items
 
 This is the store for all the items to be bench marked. When called directly
-you will get an arrayref of Item objects. 
+you will get an array reference of Item objects. 
 
 =head1 METHODS
 
@@ -63,7 +62,7 @@ Returns the count of the number of items currently stored.
   $bench->add_items( $name => { startup  => $coderef,
                                 code     => $coderef,
                                 teardown => $coderef,
-                                #varify  => $coderef, # currently not implimented
+                                #verify  => $coderef, # currently not implemented
                               }
                      ...
                    );
@@ -93,7 +92,7 @@ sub add_items {
 
 
 When you are done adding all your items, you'll want to run them. Run takes an
-int that refers to the number of times that you want to run each item, the 
+integer that refers to the number of times that you want to run each item, the 
 default is 1. 
 
   $bench->run; # fire off the run method of all known items in shuffled order
