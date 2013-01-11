@@ -4,7 +4,11 @@ use JSON;
 use List::Util qw{min max sum };
 use Data::Dumper;
 
-=head1 JSON Report
+=head1 JSON 
+
+Builds a json report as follows (though it does not format this nicely):
+
+=head2 report
 
    [
       {
