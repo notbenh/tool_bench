@@ -1,15 +1,12 @@
 #!/usr/bin/perl 
 use strict;
 use warnings;
-#use Carp::Always;
-
-=head1 WHAT?
-
-This is just a copy of the Moose based Tool::Bench::Runner, rewritten with Mouse as a dep. 
+use Getopt::Long;
+use Tool::Bench;
 
 =head1 EXAMPLE
 
-  PERL5LIB=lib script/bench.pl --interp 'perl -Ilib' --file 't/01-works.t' --count 3 --format JSON
+  perl -Ilib script/bench.pl --interp 'perl -Ilib' --file 't/01-works.t' --count 3 --format JSON
 
 =head1 TODO
 
@@ -17,55 +14,17 @@ needs docs
 
 =cut
 
-BEGIN {
-   package Tool::Bench::Runner;
-   use Mouse;
-   use Mouse::Util::TypeConstraints;
-   require Tool::Bench;
-   with qw{MouseX::Getopt};
+die qx{perldoc $0} unless @ARGV;
 
-   has [qw{file interp}] => 
-      is => 'rw',
-      isa => 'Str',
-      required => 1,
-   ;
+my ($count,$format,$interp,$file) = (1,'JSON'); #supply defaults;
+my $opt = GetOptions ("interp=s" => \$interp,
+                      "file=s"   => \$file,
+                      "format=s" => \$format,
+                      "count=i"  => \$count,
+                     );
 
-   has [qw{note name}] => 
-      is => 'rw',
-      isa => 'Str',
-   ;
-
-   has count => 
-      is => 'rw',
-      isa => 'Int',
-      default => 1,
-   ;
-
-   enum 'ReportType' => qw(Text JSON); # TODO: this should be automated? or just let it fail if theres a non-valid type?
-
-   has format =>
-      is => 'rw',
-      isa => 'ReportType',
-      default => 'text',
-   ;
-
-   sub run {
-      my $self = shift;
-      my $bench= Tool::Bench->new;
-      my $cmd = join ' ', $self->interp, $self->file;
-      $bench->add_items( $self->name || $self->file => { code => sub{qx{$cmd}}, 
-                                                         note => $self->note
-                                                       }
-                       );
-      $bench->run($self->count);
-      print $bench->report(
-        format => $self->format,
-        interp => $self->interp,
-      );
-      return 0;
-   }
-};
-
-Tool::Bench::Runner->new_with_options->run();
-
-
+my $bench = Tool::Bench->new;
+my $cmd = join ' ', $interp, $file;
+$bench->add_items($file => sub{qx{$cmd}});
+$bench->run($count);
+print $bench->report(format => $format, interp => $interp);
