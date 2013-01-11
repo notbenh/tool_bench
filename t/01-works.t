@@ -19,13 +19,17 @@ BEGIN {
 ok my $tb  = Tool::Bench->new();
 isa_ok  $tb, 'Tool::Bench';
 
+my $pre    = 0;
 my $before = 0;
-my $after = 0;
+my $after  = 0;
+my $post   = 0;
 
 ok $tb->add_items( ls  => sub{qx{ls}} ), q{add item pair};
 ok $tb->add_items( die => { code     => sub{die},
+                            pre_run  => sub{$pre++},
                             buildup  => sub{$before++},
                             teardown => sub{$after++},
+                            post_run => sub{$post++},
                             note     => 'Just how long does it take to die?',
                           },
                  ), q{add item hash} ;
@@ -36,8 +40,10 @@ ok $tb->run,    q{run single};
 ok $tb->run(3), q{run single};
 
 is $tb->items->[0]->total_runs, 4, q{items were run 4 times each};
+is $pre   , 4, q{pre run ran only once};
 is $before, 4, q{startup ran the correct number of times};
-is $after, 4,  q{teardown ran the correct number of times};
+is $after , 4, q{teardown ran the correct number of times};
+is $post  , 4, q{post run ran only once};
 
 ok $tb->report(format => 'Text'), q{can get a Text report};
 ok $tb->report(format => 'JSON'), q{can get a json report};
