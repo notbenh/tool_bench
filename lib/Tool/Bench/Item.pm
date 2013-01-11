@@ -72,7 +72,7 @@ has code =>
    required => 1,
 ;
 
-has [qw{buildup teardown}] => 
+has [qw{pre_run buildup teardown post_run}] => 
    is => 'ro',
    isa => 'CodeRef',
    default => sub{sub{}},
@@ -84,13 +84,21 @@ has note =>
    default => '',
 ;
 
+=head2 pre_run
+
+An untimed CodeRef that is executed only once before the run is 'executed'.
+
 =head2 buildup
 
 An untimed CodeRef that is executed everytime before 'run' is called.
 
 =head2 teardown
 
-Ain untimed CodeRef that is executed everytime after 'run' is called.
+An untimed CodeRef that is executed everytime after 'run' is called.
+
+=head2 post_run
+
+An untimed CodeRef that is executed only once after the run is 'executed'.
 
 =head2 note
 

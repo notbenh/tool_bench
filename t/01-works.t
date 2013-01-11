@@ -40,10 +40,10 @@ ok $tb->run,    q{run single};
 ok $tb->run(3), q{run single};
 
 is $tb->items->[0]->total_runs, 4, q{items were run 4 times each};
-is $pre   , 4, q{pre run ran only once};
+is $pre   , 2, q{pre run ran twice, for each run};
 is $before, 4, q{startup ran the correct number of times};
 is $after , 4, q{teardown ran the correct number of times};
-is $post  , 4, q{post run ran only once};
+is $post  , 2, q{post run ran twice, for each run};
 
 ok $tb->report(format => 'Text'), q{can get a Text report};
 ok $tb->report(format => 'JSON'), q{can get a json report};

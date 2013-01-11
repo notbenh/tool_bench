@@ -128,12 +128,14 @@ sub run {
    my $self  = shift;
    my $times = shift || 1;
    my $count = 0;
+   $_->pre_run->() for @{ $self->items }; # pre run even tripping
    foreach my $i (1..int($times)) {
       foreach my $item ( shuffle( @{ $self->items } ) ) {
          $item->run;
          $count++;
       }
    }
+   $_->post_run->() for @{ $self->items }; # post run even tripping
    $count; # seems completely pointless but should return something at least marginally useful
 }
 
