@@ -10,17 +10,7 @@ use Test::Most qw{no_plan};
 #  
 #-----------------------------------------------------------------
 BEGIN {
-
-   use_ok('Tool::Bench');
-   can_ok('Tool::Bench', qw{
-      new
-
-      items
-      items_count
-
-      run
-   });
-      #report
+  use_ok('Tool::Bench');
 }
 
 #-----------------------------------------------------------------
@@ -42,7 +32,6 @@ ok $tb->add_items( die => { code     => sub{die},
 ok $tb->add_items( true => sub{1}, sleep => sub{sleep(1)}), q{add more then one item};
 is $tb->items_count, 4, q{right count of items};
 
-
 ok $tb->run,    q{run single};
 ok $tb->run(3), q{run single};
 
@@ -51,5 +40,4 @@ is $before, 4, q{startup ran the correct number of times};
 is $after, 4,  q{teardown ran the correct number of times};
 
 ok $tb->report(format => 'Text'), q{can get a Text report};
-#eq_or_diff $tb->report('JSON'), {}, q{can get a report};
 ok $tb->report(format => 'JSON'), q{can get a json report};
